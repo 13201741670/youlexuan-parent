@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory"
+          id="connectionFactory" p:brokerURL="tcp://192.168.72.10:61616">
+    </bean>
+    <bean class="org.springframework.jms.connection.SingleConnectionFactory"
+          id="singleConnectionFactory" p:targetConnectionFactory-ref="connectionFactory">
+    </bean>
+    <bean class="org.springframework.jms.core.JmsTemplate"
+          id="jmsTemplate" p:connectionFactory-ref="singleConnectionFactory">
+    </bean>
+    <bean class="org.apache.activemq.command.ActiveMQQueue" p:physicalName="item-update" id="destination">
+    </bean>
+    <bean class="org.apache.activemq.command.ActiveMQQueue" p:physicalName="delete-solr" id="activeMQQueueDel">
+    </bean>
+    <bean class="org.apache.activemq.command.ActiveMQQueue" p:physicalName="create-page" id="createPageQueue"></bean>
+    <bean class="org.apache.activemq.command.ActiveMQQueue" p:physicalName="delete-page" id="deletePageQueue"></bean>
+</beans>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory"
+          id="connectionFactory" p:brokerURL="tcp://192.168.72.10:61616">
+    </bean>
+    <bean class="org.springframework.jms.connection.SingleConnectionFactory"
+          id="singleConnectionFactory" p:targetConnectionFactory-ref="connectionFactory">
+    </bean>
+    <bean class="org.apache.activemq.command.ActiveMQQueue" p:physicalName="create-page" id="activeMQQueue">
+
+    </bean>
+    <bean class="org.apache.activemq.command.ActiveMQQueue" p:physicalName="delete-page" id="activeMQQueueDel">
+
+    </bean>
+    <bean class="com.xxx.proj.listener.CreatePageListener" id="createPageListener" ></bean>
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer"
+          p:connectionFactory-ref="singleConnectionFactory"
+          p:destination-ref="activeMQQueue"
+          p:messageListener-ref="createPageListener">
+    </bean>
+    <bean class="com.xxx.proj.listener.DeletePageListener" id="deletePageListener" ></bean>
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer"
+          p:connectionFactory-ref="singleConnectionFactory"
+          p:destination-ref="activeMQQueueDel"
+          p:messageListener-ref="deletePageListener">
+    </bean>
+</beans>
